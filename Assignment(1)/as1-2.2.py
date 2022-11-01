@@ -49,7 +49,8 @@ while 1:
                         yans = n_arr[right]
             left += 1
 
-print(xans, yans)
+
+
 
 
 
