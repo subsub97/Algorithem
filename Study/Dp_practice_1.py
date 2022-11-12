@@ -10,4 +10,4 @@ def dp(x):
     memo[x] = dp(x-1) + dp(x-2);
     return memo[x]
 
-print(dp(5))
+print(dp(10))
