@@ -17,35 +17,39 @@
 출력 예
 12
 '''
-def find_cost_using_step(k_arr,cost_arr,n):
+def find_cost_using_step(move_arr,cost_arr,n):
     sum_costArr = [ 0 for _ in range(n+1)]
     #0번째 층 비용
     sum_costArr[0] = 0
     # k_arr= [1,3,4,7]
+    step_cnt = len(move_arr)
+    for elem in move_arr:
+        sum_costArr[elem] = cost_arr[elem -1] # cost_arr 에는 0번째 idx가 1번째 층 비용이기 때문에 -1 한다.
 
-    max_range = k_arr[-1]
-    for elem in k_arr:
-        for  i in range(1,max_range + 1):
-            if elem == i:
-                sum_costArr[elem] =
-            else:
-                sum_costArr[i] =
-    #1번째 층 비용
-    sum_costArr[1] = cost_arr[0]
-    #2번째 층 비용
-    sum_costArr[2] = cost_arr[1] + cost_arr[0]
-    #3번쨰 층 비용
-    sum_costArr[3] = cost_arr[2] if (sum_costArr[1] + sum_costArr[2]) >= 1 else sum_costArr[2] + cost_arr[2]
+    if step_cnt > 1:
+        for i in range(len(move_arr) - 1):
+            cnt = move_arr[i+1] // move_arr[i]
+            for j in range(2,cnt+1):
+                if sum_costArr[move_arr[i] * j] == 0:
+                    sum_costArr[move_arr[i] * j] = cost_arr[i - 1] + cost_arr[i * j -1]
 
-
-    for i in range(4,n+1):
-        sum_costArr[i] = min(sum_costArr[i-1] , sum_costArr[i-3] ,sum_costArr[i-4]) + cost_arr[i-1]
+    for i in range(move_arr[-1],n+1):
+        min_arr = []
+        for j in range(len(move_arr)):
+            min_arr.append(sum_costArr[i-move_arr[j]]) # dp에서 사용 할 (i - 계단수) 를 계산하기 위함
+        min_cost = min(min_arr)
+        sum_costArr[i] = min_cost + cost_arr[i-1]
 
 
 
     return sum_costArr[n]
-
+#최종 목적지 n
 n = int(input())
+#각 계단의 비용
 cost_arr = list(map(int,input().split()))
+# k개의 칸
+k = int(input())
+#움직일 수 있는 조건
+move_arr = tuple(map(int,input().split()))
 
-print(find_cost_using_step(cost_arr,n))
+print(find_cost_using_step(move_arr,cost_arr,n))
