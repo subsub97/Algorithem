@@ -21,18 +21,17 @@ def find_cost_using_step(move_arr,cost_arr,n):
     sum_costArr = [ 0 for _ in range(n+1)]
     #0번째 층 비용
     sum_costArr[0] = 0
-
+    # k_arr= [1,3,4,7]
     step_cnt = len(move_arr)
     for elem in move_arr:
         sum_costArr[elem] = cost_arr[elem -1] # cost_arr 에는 0번째 idx가 1번째 층 비용이기 때문에 -1 한다.
 
-    if step_cnt > 1:
-        for i in range(len(move_arr) - 1):
-            cnt = move_arr[-1] // move_arr[i]
-            for j in range(2,cnt+1):
-                test_num = cost_arr[i - 1] + cost_arr[i * j -1]
-                if sum_costArr[move_arr[i] * j] == 0 or sum_costArr[move_arr[i] * j] > test_num:
-                    sum_costArr[move_arr[i] * j] = test_num
+
+    for i in range(len(move_arr) - 1):
+      cnt = move_arr[-1] // move_arr[i]
+      for j in range(2,cnt+1):
+        if sum_costArr[move_arr[i] * j] == 0:
+           sum_costArr[move_arr[i] * j] = cost_arr[i - 1] + cost_arr[i * j -1]
 
     for i in range(move_arr[-1],n+1):
         min_arr = []
