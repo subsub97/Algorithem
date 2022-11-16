@@ -18,27 +18,35 @@
 12
 '''
 def find_cost_using_step(move_arr,cost_arr,n):
-    sum_costArr = [ 0 for _ in range(n+1)]
+    sum_costArr = [ 10001 for _ in range(n+1)]
     #0번째 층 비용
     sum_costArr[0] = 0
-    # k_arr= [1,3,4,7]
-    step_cnt = len(move_arr)
-    for elem in move_arr:
-        sum_costArr[elem] = cost_arr[elem -1] # cost_arr 에는 0번째 idx가 1번째 층 비용이기 때문에 -1 한다.
 
 
-    for i in range(len(move_arr) - 1):
-      cnt = move_arr[-1] // move_arr[i]
-      for j in range(2,cnt+1):
-        if sum_costArr[move_arr[i] * j] == 0:
-           sum_costArr[move_arr[i] * j] = cost_arr[i - 1] + cost_arr[i * j -1]
-
-    for i in range(move_arr[-1],n+1):
+    for i in range(move_arr[-1]): #len(m)번
         min_arr = []
-        for j in range(len(move_arr)):
+        check_point = 0
+        for cost in move_arr: # m번
+            if i >= cost:
+                min_arr.append(sum_costArr[i-cost])
+                min_arr.append(sum_costArr[i])
+                check_point = 1
+            else:
+                break
+        if check_point == 1:
+            min_cost = min(min_arr)
+            sum_costArr[i] = min_cost + cost_arr[i - 1]
+
+
+    for i in range(move_arr[-1],n+1): # n번
+        min_arr = []
+        for j in range(len(move_arr)): # len(m)번
             min_arr.append(sum_costArr[i-move_arr[j]]) # dp에서 사용 할 (i - 계단수) 를 계산하기 위함
         min_cost = min(min_arr)
         sum_costArr[i] = min_cost + cost_arr[i-1]
+
+    if sum_costArr[n] >= 10001:
+        return -1
 
 
 

@@ -37,3 +37,6 @@ n = int(input())
 cost_arr = list(map(int,input().split()))
 
 print(find_cost_using_step(cost_arr,n))
+
+[2 5 10]
+

@@ -29,16 +29,19 @@ def find_same_char_amount(A,B):
                      memo_arr.append(i)
                      # memo_arr.append(j)
 
-
+    # 겹치는것이 없는경우
+    if max_length < 1:
+        return 0,0
 
     return max_length,memo_arr
 
 max_length,memo_arr=find_same_char_amount(first_word,second_word)
 # start_point = memo_arr[0] - max_length
-
-print_arr = []
-for elem in memo_arr:
-    start_point = elem - max_length
-    for i in range(start_point,elem+1):
-        print_arr.append(first_word[start_point:elem])
-print(min(print_arr))
+if max_length > 1:
+    print_arr = []
+    for elem in memo_arr:
+        start_point = elem - max_length
+        for i in range(start_point,elem+1):
+            print_arr.append(first_word[start_point:elem])
+    if len(print_arr) > 1:
+        print(min(print_arr))
