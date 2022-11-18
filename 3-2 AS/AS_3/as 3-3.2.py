@@ -45,3 +45,5 @@ if max_length > 1:
             print_arr.append(first_word[start_point:elem])
     if len(print_arr) > 1:
         print(min(print_arr))
+
+
