@@ -1,22 +1,21 @@
-# 재귀함수 호출 limit을 설정하는 import
-import sys
-sys.setrecursionlimit(10**9)
 
 n = int(input())
 
 mode_num = 1000000007
-
 # 덧셈 나머지 분배 법칙 ((A % p) + (B % p)) % p
 
-def find_fibonacci_num(n):
-    if n == 1:
-        first_num = n % mode_num
-        second_num = 0
-        return first_num,second_num
-
-    else:
-        first_num, second_num = find_fibonacci_num(n-1)
-        return (first_num + second_num) % mode_num,first_num
-
-answer,b = find_fibonacci_num(n)
+def find_fibonacci_num(n,cnt):
+    while cnt <= n:
+        if cnt == 1:
+            first_num = cnt % mode_num
+            second_num = 0
+            cnt += 1
+            #return first_num,second_num
+        else:
+            temp = first_num
+            first_num = (first_num + second_num) % mode_num
+            second_num = temp
+            cnt +=1
+    return first_num
+answer = find_fibonacci_num(n,1)
 print(answer)
