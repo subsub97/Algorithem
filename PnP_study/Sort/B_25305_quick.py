@@ -38,8 +38,8 @@ def quick_sort(list,start,end):
 # 입력
 n,k = map(int,input().split())
 score_arr = list(map(int,input().split()))
-quick_sort(score_arr,0,4)
+quick_sort(score_arr,0,n-1)
 
 
 # 출력
-print(score_arr)
+print(score_arr[k-1])
