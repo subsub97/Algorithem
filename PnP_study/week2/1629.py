@@ -13,4 +13,3 @@ def find_mode(A,num):
 print(find_mode(A,B))
 
 
-

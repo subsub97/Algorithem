@@ -10,7 +10,5 @@ def find_mode(A,num):
             return (sort_num * sort_num * A) % C
         else: # 짝수인 경우
             return (sort_num * sort_num) % C
+
 print(find_mode(A,B))
-
-
-
