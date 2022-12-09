@@ -3,7 +3,7 @@
 
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**9)
+sys.setrecursionlimit(10**6)
 
 class Graph:
     def __init__(self,size):
@@ -14,18 +14,11 @@ class Graph:
         self.adjMatrix[v1][v2] = 1
         self.adjMatrix[v2][v1] = 1  # 무향 그래프의 인접행렬은 대칭적이기에 바로 그려준다.
 
-def find_area_dfs(area,r,c,visit): # r: row c:col
-    if area[r][c] == 1 and visit[r][c] == None:
-        visit[r][c] = True
-        visit[c][r] = True # 무방향 그래프이기에 한번에 처리
-        find_area_dfs(area,c,c,visit)
-
-    for i in range(c,people):
-        if visit[r][i] == None and area[r][i] == 1:
-            visit[r][i] = True
-            visit[i][r] = True
-            find_area_dfs(area,i,i,visit)
-
+def find_area_dfs(area,r,visit): # r:row c:col
+    visit[r] = True # 방문된 행이라고 체크
+    for i in range(people):
+        if area[r][i] == 1 and visit[i] == None:
+            find_area_dfs(area,i,visit)
 
 
 people,relation = map(int,input().split()) # n은 사람들의 수 , 친구 관계의 수
@@ -38,26 +31,12 @@ for _ in range(relation):
     g.insertEdge(row,col)
 
 # 방문 여부를 기록해줄 2차원 배열 생성
-visit_list = [
-    [None for _ in range(people)]
-    for _ in range(people)
-]
+visit = [None for _ in range(people)]
 cnt = 0
-
 for i in range(people):
-    zero_cnt = 0
-    for j in range(people):
-        if visit_list[i][j] == None and g.adjMatrix[i][j] == 1:
-            cnt +=1
-            find_area_dfs(g.adjMatrix,i,j,visit_list)
-            break
-        if g.adjMatrix[i][j] == 0:
-            zero_cnt +=1
-    if zero_cnt == people:
+    if visit[i] == None:
+        find_area_dfs(g.adjMatrix,i,visit)
         cnt +=1
-
-if relation == 0:
-    cnt = people
 print(cnt)
 
 
