@@ -18,12 +18,13 @@ def find_area_dfs(area,r,c,visit): # r: row c:col
     if area[r][c] == 1 and visit[r][c] == None:
         visit[r][c] = True
         visit[c][r] = True # 무방향 그래프이기에 한번에 처리
-        find_area_dfs(area,c,r,visit)
-    for i in range(people):
-        if area[r][i] == 1 and visit[r][i] == None:
+        find_area_dfs(area,c,c,visit)
+
+    for i in range(c,people):
+        if visit[r][i] == None and area[r][i] == 1:
             visit[r][i] = True
             visit[i][r] = True
-            find_area_dfs(area,i,r,visit)
+            find_area_dfs(area,i,i,visit)
 
 
 
@@ -49,6 +50,7 @@ for i in range(people):
         if visit_list[i][j] == None and g.adjMatrix[i][j] == 1:
             cnt +=1
             find_area_dfs(g.adjMatrix,i,j,visit_list)
+            break
         if g.adjMatrix[i][j] == 0:
             zero_cnt +=1
     if zero_cnt == people:
