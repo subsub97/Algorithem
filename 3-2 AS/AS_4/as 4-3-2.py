@@ -29,10 +29,17 @@ class Graph: # 연결리스트를 이용한 그래프
 
 def find_area_dfs(area,v,visit):
     visit[v] = True
+    global element_cnt
+    global large_cnt
+    if v >= large_cnt:
+        large_cnt = v
+    element_cnt += 1
     current = area.adjList[v]
+
     while current != None: # 연결된 vertex를 모두 방문하기 위함
         if visit[current.num] == None:
             find_area_dfs(area,current.num,visit)
+
         current = current.link
 
 
@@ -41,8 +48,12 @@ n,m = map(int,input().split()) #n은 vertex 개수, m은 edge 개수
 
 g = Graph(n)
 
+element_cnt = 0
+max_cnt = 0
+large_cnt = 0
+overlap = []
 visit = [None] * n # 방문 관리를 위한 Vertex의 수 만큼 만들어준다.
-group_cnt = 0
+
 for i in range(m): # input each edge
     v1,v2 = map(int,input().split())
     g.insertEdge(v1,v2)
@@ -50,6 +61,18 @@ for i in range(m): # input each edge
 for i in range(n): # 최대 집단을 찾기위한 반복문 작성
     if visit[i] == None:
         find_area_dfs(g,i,visit)
-        group_cnt += 1
+        if max_cnt < element_cnt:
+            max_cnt = element_cnt
+            overlap = [] # 중복관리 배열 초기화
+            overlap.append(large_cnt)
 
-print(group_cnt)
+        elif max_cnt == element_cnt:
+            overlap.append(large_cnt)
+
+        element_cnt = 0
+        large_cnt = 0
+
+print(max_cnt)
+overlap.sort()
+for elem in overlap:
+    print(elem,end =' ')
