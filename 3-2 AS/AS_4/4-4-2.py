@@ -7,6 +7,7 @@ class Node:
     def __init__(self,num):
         self.num = num
         self.link = None
+        self.parent = None
 
 class Graph: # 연결 리스트 형태의 그래프
     def __init__(self,size):
@@ -27,9 +28,13 @@ def find_min_path(map,v,visit,queue):
     global min_path,destination,flag
     current = map.adjLink[v] # 연결 리스트에 접근
     min_path += 1
+    newnode = Node(v)
+    temp = newnode
     while current != None: # 행의 연결리스트를 모두 queue에 넣어준다.
-        queue.append(current.num)
+        queue.append(current)
+        current.parent = temp
         current = current.link
+
     q_size = len(queue)
     cnt = 0
     while queue:
@@ -37,23 +42,24 @@ def find_min_path(map,v,visit,queue):
             min_path += 1
             q_size = len(queue)
             cnt = 0
-        num = queue.popleft()
+        node = queue.popleft()
         cnt += 1
-        if num == destination:
+
+        if node.num == destination:
             queue.clear()
             flag = 1
-            return
-        if visit[num] == None:
-            visit[num] = True
-            current = map.adjLink[num] # 리스트에 접근
+            return node
+
+        temp = node
+        if visit[node.num] == None:
+            visit[node.num] = True
+            current = map.adjLink[node.num] # 리스트에 접근
             while current != None:
-                # if current.num == destination:# 정답을 찾음
-                #     queue.clear()
-                #     flag = 1
-                #     return
+                current.parent = temp
                 if visit[current.num] == None:
-                    queue.append(current.num)
+                    queue.append(current)
                 current = current.link
+
 
 n,m = map(int,input().split())
 
@@ -69,15 +75,18 @@ for _ in range(m): # 에지관계 형성
     g.insertEdge(v1,v2)
 
 departure,destination = map(int,input().split()) #최단거리를 알고싶은 두역을 받는다.
-find_min_path(g,departure,visit,q)
+a = find_min_path(g,departure,visit,q)
 if flag == 1:
-    print(min_path)
+    while a != None:
+        path_list.append(a.num)
+
+        a = a.parent
+    path_list.reverse()
+    for i in path_list:
+        print(i, end=' ')
+
 else:
     print('-1')
 
 
-'''
-queue에 쌓아두고 같은 레벨에 있는 노드인지 체크하는부분에서
-오류가 있었다 이부분을 캐치하기까지 너무 오래 걸렸지만 앞으로
-잊지 않을거 같다. 
-'''
+# 부모노드가 바뀔수도있다.

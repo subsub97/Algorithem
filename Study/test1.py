@@ -1,10 +1,9 @@
+from collections import deque
 
-cnt = 3
+q = deque()
 
-def example_func(n):
-    cnt += n
-    return 0
+q.append(1)
+q.append(2)
 
-example_func(2)
-
-print(cnt)
+print(q.popleft())
+print(q)
