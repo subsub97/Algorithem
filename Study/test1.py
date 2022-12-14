@@ -1,9 +1,4 @@
-from collections import deque
+n = int(input())
 
-q = deque()
-
-q.append(1)
-q.append(2)
-
-print(q.popleft())
-print(q)
+for i in range(1,10):
+    print(f"{n} * {i} = {n * i} ")

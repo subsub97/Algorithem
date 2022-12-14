@@ -117,22 +117,14 @@ min_cnt = 2500001
 for i in range(n):
     for j in range(m):
         zero_cnt = 0
-        if n < 3 or m <3:
-            if visit_2d[i][j] == None and maze[i][j] != 1:
-                cnt +=1
-                small_dfs(maze,i,j,visit_2d)
-                if zero_cnt > max_cnt:
-                    max_cnt = zero_cnt
-                if zero_cnt < min_cnt:
-                    min_cnt = zero_cnt
-        else:
-            if visit_2d[i][j] == None and maze[i][j] != 1:
-                cnt += 1
-                small_dfs(maze,i,j,visit_2d)
-                if zero_cnt > max_cnt:
-                    max_cnt = zero_cnt
-                if zero_cnt < min_cnt:
-                    min_cnt = zero_cnt
+        if visit_2d[i][j] == None and maze[i][j] != 1:
+            cnt +=1
+            small_dfs(maze,i,j,visit_2d)
+            if zero_cnt > max_cnt:
+                max_cnt = zero_cnt
+            if zero_cnt < min_cnt:
+                min_cnt = zero_cnt
+
 print(cnt)
 if min_cnt == 2500001: # 0 인경우를 대비
     min_cnt = 0
