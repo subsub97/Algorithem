@@ -37,18 +37,29 @@ def find_min_path(map,v,visit,queue):
 
     q_size = len(queue)
     cnt = 0
+    check_num = 0
     while queue:
         if q_size == cnt:
             min_path += 1
             q_size = len(queue)
             cnt = 0
+
+        if check_num != 0 and  check_num < min_path:
+            queue.clear()
+            flag = 1
+            return
+
+
         node = queue.popleft()
         cnt += 1
 
         if node.num == destination:
-            queue.clear()
-            flag = 1
-            return node
+                check_num = min_path
+                if len(node_list) == 0:
+                    node_list.append(node)
+                else:
+                    if node_list[0].parent.num < node.parent.num:
+                        node_list[0] = node
 
         temp = node
         if visit[node.num] == None:
@@ -65,6 +76,7 @@ n,m = map(int,input().split())
 
 g = Graph(n)
 path_list =[]
+node_list =[]
 visit = [None] * n # 방문기록용 리스트 생성
 q = deque() #BFS 방식의 탐방을 위한 queue 생성
 
@@ -75,8 +87,9 @@ for _ in range(m): # 에지관계 형성
     g.insertEdge(v1,v2)
 
 departure,destination = map(int,input().split()) #최단거리를 알고싶은 두역을 받는다.
-a = find_min_path(g,departure,visit,q)
-if flag == 1:
+find_min_path(g,departure,visit,q)
+a = node_list[-1]
+if flag == 1 or len(node_list) >= 1:
     while a != None:
         path_list.append(a.num)
 
@@ -89,4 +102,5 @@ else:
     print('-1')
 
 
-# 부모노드가 바뀔수도있다.
+# 부모노드가 바뀔수도있다. (수정)
+# 문제에서 제시한 도착점 전에 노드가 여러개인 경우 가장 큰 노드를 출력해야한다.
