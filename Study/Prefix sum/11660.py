@@ -1,4 +1,5 @@
-# 2차원 누적합 문제 try 1
+# 2차원 누적합 문제 try 2
+# try 1에서 sum_val을 해주는 index값을 잘 못 정해주었던 것을 수정함
 import sys
 
 row , q = map(int,input().split()) # row는 2차원 배열의 행의 수 q는 구간합을 구할 question의 수
@@ -34,7 +35,7 @@ for j in range(q):
         else:
             for i in range(x1,x2+1):
                 if i == x2:
-                    sum_val += sum_2d[i][y2] - sum_2d[i][y1-1] # 0번쨰 자기보다 하나 이전 누적합을 값을 빼주어야하기때문에 -1 을 해준다.
+                    sum_val += sum_2d[i][row-1] - sum_2d[i][y1-1] # 0번쨰 자기보다 하나 이전 누적합을 값을 빼주어야하기때문에 -1 을 해준다.
                     break
                 sum_val += sum_2d[i][row -1] - sum_2d[i][y1-1] # 행이 하나씩 증가함에 따라 누적값 증가
             answer_arr.append(sum_val)
@@ -43,7 +44,7 @@ for j in range(q):
             sum_val = sum_2d[x1][y2]
             answer_arr.append(sum_val)
         else:
-            sum_val = sum_2d[x1][y2] - sum_2d[x1][y2-1]
+            sum_val = sum_2d[x1][y2] - sum_2d[x1][y1-1]
             answer_arr.append(sum_val)
 
 
