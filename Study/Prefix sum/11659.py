@@ -17,4 +17,4 @@ for i in range(m):
         print(sum_arr[end-1])
 
 # 구간합이 0번째 인덱스부터 시작하는 경우 예외 처리를 만들어주었다.
-# 다음엔 sys.stdin.readline 을 사용해보자 
+# 다음엔 sys.stdin.readline 을 사용해보자

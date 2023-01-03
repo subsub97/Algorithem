@@ -1,4 +1,4 @@
-# try1
+# try2
 
 '''
 평소 반상회에 참석하는 것을 좋아하는 주희는 이번 기회에 부녀회장이 되고 싶어 각 층의 사람들을 불러 모아 반상회를 주최하려고 한다.
@@ -11,25 +11,27 @@
 
 
 T = int(input())
-dp_table = [[]] # 고정으로 정해져있는 0층 사람들의 리스트
+zero_floor = [[]] # 고정으로 정해져있는 0층 사람들의 리스트
 ans_arr = []
 for i in range(1,15):# 0 층 i 호엔 i 명이 산다
-    dp_table[0].append(i)
+    zero_floor[0].append(i)
 
 for i in range(T):  # T개의 testCase
     k = int(input()) # k = 층
     n = int(input()) # n = 호
-    dp_table.append([])
+
     for j in range(k):
         sum = 0
-        for g in range(13):
+        zero_floor.append([])
+        for g in range(14):
             if g == 0:
-                dp_table[j+1].append(dp_table[j][g])
-                sum = dp_table[j][g]
+                zero_floor[j+1].append(zero_floor[j][g])
+                sum = zero_floor[j][g]
             else:
-                dp_table[j+1].append(sum+dp_table[j][g])
-                sum += dp_table[j][g]
-    ans_arr.append(dp_table[k][n-1])
+                zero_floor[j+1].append(sum+zero_floor[j][g])
+                sum += zero_floor[j][g]
+
+    ans_arr.append(zero_floor[k][n-1])
 for num in ans_arr:
     print(num)
 
