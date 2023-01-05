@@ -8,6 +8,9 @@ try 4 input()을 sys.stdin.readline()으로 바꿔보았다.
 try 5 이전 num_arr[j-1] 값이 음수였을때 break를 했었지만 이번엔
       그 break 포인트 이후부터 num_arr 값을 넣어주는 방식으로 접근해보았다.
       max 대상자는 음수값 이후의 핪에서만 나오는 것을 이용해봤다.
+try 6 memo[i] 에 값을 넣어주는 상황에서 memo[i-1]값이 음수라면
+      memo[i]=memo[i-1] + num_arr[i] 로 하면 안되었는데 이부분을
+      제약을 걸어주어 문제를 해결 하였다.
 '''
 import sys
 
@@ -40,8 +43,9 @@ while cnt < n:
         if memo[i - 1] + num_arr[i] < 0:
             cnt = i
             break
-
-        memo[i] = memo[i - 1] + num_arr[i]
+        # 음수인경우에는 더한값으로 할당하면 안된다.
+        if memo[i-1] >= 0:
+            memo[i] = memo[i - 1] + num_arr[i]
 
         if memo[i-1] + num_arr[i] > max:
             max = memo[i-1] + num_arr[i]
