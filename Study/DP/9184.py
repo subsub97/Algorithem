@@ -1,48 +1,35 @@
-# 신나는 함수 실행 DP try3
+# 신나는 함수 실행 DP try6
+# 한번 구하면 다시 구해진수 이전은 다시 구하지 않는 방법으로 수정하자
+memo = [
+    [
+        [
+            0 for _ in range(21)
+        ] for _ in range(21)
+    ] for _ in range(21)
+]
+# 1 이 아닌 0으로 변경
+def w(a,b,c):
+    if a <= 0 or b <= 0 or c <= 0:
+        return 1
+    if a > 20 or b > 20 or c > 20:
+        return w(20,20,20)
+    if memo[a][b][c]:
+        return memo[a][b][c]
+    if a < b and b < c:
+        memo[a][b][c] = w(a,b,c-1) + w(a,b-1,c-1) - w(a,b-1,c)
+        return memo[a][b][c]
+    memo[a][b][c] = w(a-1,b,c) + w(a-1,b-1,c) + w(a-1,b,c-1) - w(a-1,b-1,c-1)
+    return memo[a][b][c]
+
 
 while True:
     a,b,c = map(int,input().split())
-    flag = 0
-    memo = [
-        [
-            [
-                1 for _ in range(20)
-            ] for _ in range(20)
-        ] for _ in range(20)
-    ]
-
     # 세 변수 모두 -1 인경우의 종료 조건을 생성
     if a == -1 and b == -1 and c == -1:
         break
-    if a > 20 or b > 20 or c > 20:
-        a1 = a
-        b1 = b
-        c1 = c
-        a = 20
-        b = 20
-        c = 20
-        flag = 1
 
-    # 음수인 경우에 a,b,c가 20보다 큰경우와 중복되는 경우를 제외함
-    if a < -19 or b < -19 or c < -19 and flag != 1:
-        a1 = a
-        b1 = b
-        c1 = c
-        a = -19
-        b = -19
-        c = -19
-        flag =1
+    ans = w(a,b,c)
+
+    print(f"w({a}, {b}, {c}) = {ans}")
 
 
-    for i in range(a):
-        for j in range(b):
-            for k in range(c):
-                if i < j and j < k :
-                    memo[i][j][k] = memo[i][j][k - 1] + memo[i][j - 1][k - 1] - memo[i][j - 1][k]
-                else:
-                    memo[i][j][k] = memo[i-1][j][k]  + memo[i-1][j-1][k] + memo[i-1][j][k-1] - memo[i-1][j-1][k-1]
-    # flag로 나눈 이유는 20보다 큰경우 a,b,c를 20으로 바꿔주었기에 입력 값을 기억해둔 변수를 출력변수로 사용하기 위함
-    if flag == 0:
-        print(f"w({a},{b},{c}) = {memo[a-1][b-1][c-1]}")
-    else:
-        print(f"w({a1},{b1},{c1}) = {memo[a - 1][b - 1][c - 1]}")
