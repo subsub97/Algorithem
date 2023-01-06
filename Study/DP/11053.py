@@ -4,6 +4,9 @@ try1 틀렸습니다.
 try2 current_num을 바꾸는 조건을 바꾸었다.
      이전에는 j가 증가할떄 마다 바꾸었는데 이러한 경우에
      중복된 값을 count하는 경우가 발생한다.
+try 3 try2 까지의 방식은 DP알고리즘이 아니여서 새로
+      코드를 만들어 보았다.
+
 '''
 import sys
 n = int(input())
@@ -16,15 +19,41 @@ memo = [
     0 for _ in range(n)
 ]
 
-max_cnt = 0
+max_cnt = 1
 
 for i in range(n):
-    current_num = num_arr[i]
-    for j in range(i+1,n):
-         if current_num < num_arr[j]:
-             memo[i] += 1
-             current_num = num_arr[j]
-    if max_cnt < memo[i]:
+    for j in range(i):
+        if num_arr[i] > num_arr[j] and memo[i] < memo[j]:
+            memo[i] = memo[j]
+    memo[i] += 1
+    if memo[i] > max_cnt:
         max_cnt = memo[i]
 
-print(max_cnt + 1)
+print(max_cnt)
+
+'''
+3-4일 연속 하루에 한두문제씩 DP문제를 풀고있지만
+정말 감이 잡히지 않는다. 점화식을 세우고 설계하는 것이 
+어렵고 어떻게 접근해야할지 감이 안잡힌다.
+오늘 이 문제를 풀면서도 2트까지 날려버리고 내가 DP로
+풀이를 하고있는게 아니라는 느낌이 들었다.
+
+그래서 검색해보고 문제를 해결 하게 되었지만
+다시한번 정리하면서 내것으로 만들어야겠다.
+
+먼저 가장긴 수열을 찾기 위한 점화식을 어떻게 세울까?
+i를 증가 시키면서 i 이전에 있는 수들과 값을 비교한다.
+만약 i > i-n 이라면 dp[i] = dp[i-n]을 해준다.
+왜 이렇게 하는 것 일까? 
+이유는 i > i-n 일떄 dp[i] += 1 을 한다면 
+수열이아닌 단순 i-n 보다 큰수는 몇개인가? 를 찾아내는 것이다.
+따라서 이전 i-n의 dp값을 가져오는 방식으로 한다. 
+여기서 중요한점음  i > i-n and dp[i] < dp[i-n] 인 조건이
+존재해야 한다는 것이다.
+
+저 조건이 없다면 [1, 3, 1, 4] 가 있을때 i = 3 인 경우
+정답은 3 이 나와야 하는데 dp[i-1]에 있는 1의 값을 가져 오는 경우가
+생간다. 저 조건이 있음으로써 오로지 더 수가 앞에 나온수보다  큰 경우에만
+앞에 나온 수라는것은 i-1 , i-2 이러한 1, 3, 1 ,4 처럼 
+모든것을 말하는게 아닌 1 , 3 , 4를 말하고 이렇게 선택 할 수 있게된다. 
+'''
