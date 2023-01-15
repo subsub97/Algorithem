@@ -19,43 +19,27 @@ min_elapse_time = 100000000
 
 while height <= 256:
     elapsed_time = 0
-    b = temp_b
+    add_block = 0
+    use_block = 0
     flag = 0
     for i in range(n):
         for j in range(m):
             high = area[i][j]
             if high > height:
-                # 높이가 높은 지층을 height과 같게 만들면서 inven을 채운다.
-                # 먼저 이 작업을 하는 이유는 높은 것을 먼저 height로 맞춘다면 낮은 지층을 위로 쌓을때
-                # inven에서 부족함이 발생할 경우 주어진 조건에서 height으로 평탄화 작업을 할 수 없음을 증명하기 위함
-                while high != height:
-                    high -= 1 #높은층 평탄화 작업
-                    b += 1 # inven 증가
-                    elapsed_time += 2
-                    flag = 1
-
-
-    for i in range(n):
-        for j in range(m):
-            high = area[i][j]
-            if high < height:
-                # 평탄화를 원하는 기준 height보다 낮은 층이라면 height까지 맞추준다.
-                while high < height:
-                    if b > 0: #inventory에 지층을 쌓기위한 층이 존재하면
-                        high += 1
-                        elapsed_time += 1
-                        flag = 1
-                    else:
-                        break
-
-    if flag ==1 and elapsed_time < min_elapse_time:
-        min_elapse_time = elapsed_time
-        height_list = [height]
-
-    elif elapsed_time == min_elapse_time:
-        height_list.append(height)
-    else:
+                add_block += high - height
+                flag = 1
+            else:
+                use_block += height - high
+    if flag == 0 and use_block > b:
         break
+    if use_block > add_block + b:
+        height += 1
+        continue
+    else:
+        elapsed_time = add_block * 2 + use_block
+        if elapsed_time <= min_elapse_time:
+            min_elapse_time = elapsed_time
+            max_height = height
     height += 1
 
-print(min_elapse_time,max(height_list))
+print(min_elapse_time,max_height)
