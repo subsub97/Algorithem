@@ -17,10 +17,21 @@ if '+'  in (op_line):
                for val in split_Pnum:
                    sum_val += int(val)
                sum_val = -sum_val
+               min_val += sum_val
+
             else:
-                sum_val = int(num)
-            min_val += sum_val
-            sum_val = 0
+                if num == '':
+                    flag = 1
+                    min_val -= sum_val
+                else:
+                    sum_val = int(num)
+                    if flag == 1:
+                        min_val -= sum_val
+
+                    else:
+                        flag = 1
+                        min_val += sum_val
+            sum_val =0
     else: # + 연산자로만 이루어진 수식
         split_Pnum = op_line.split('+')
         for num in split_Pnum:
@@ -41,7 +52,3 @@ else: # -로 만 연산자가 이루어진 경우
 
 print(min_val)
 
-'''
-20 - 30 + 20  - 190 +200 +100 -12
--20 - 30 - 40 - 50 이라면 ? 20 ,30 ,40 ,50 일텐데? 
-'''
