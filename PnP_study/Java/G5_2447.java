@@ -1,10 +1,16 @@
 
-import java.util.Scanner;
+//import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+
 public class G5_2447 {
     private static String[][] starGrid;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
         starGrid = new String[n][n];
 
         int k = 0;
@@ -14,7 +20,7 @@ public class G5_2447 {
             k++;
         }
         String[][] initGrid = {{"*","*","*"},{"*"," ","*"},{"*","*","*"}};
-
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 1; i <= k; i++) {
 //            System.out.println("현재의 init : "+initGrid.length);
@@ -22,11 +28,11 @@ public class G5_2447 {
             if(i == k) {
                 for (int j = 0; j < initGrid.length; j++) {
                     for (int g = 0; g < initGrid.length; g++) {
-                        System.out.print(initGrid[j][g] + " ");
+                        sb.append(initGrid[j][g]);
                     }
-                    System.out.println();
-
+                    sb.append('\n');
                 }
+                System.out.print(sb);
             }
         }
 
