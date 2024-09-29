@@ -1,6 +1,6 @@
 # [level 4] 그룹별 조건에 맞는 식당 목록 출력하기 - 131124 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131124#qna) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131124) 
 
 ### 성능 요약
 
@@ -12,11 +12,11 @@
 
 ### 채점결과
 
-Empty
+REVIEW_IDREST_IDMEMBER_IDREVIEW_SCOREREVIEW_TEXTREVIEW_DATEMEMBER_IDR00000004700024minjea985@naver.com5안에 찰밥이 들어있는건지 속 내용물이 특히 맛있었어요2022-02-18 00:00:00minjea985@naver.comR00000004500004minjea985@naver.com4사람들이 왜 이 음식점을 찬양하는지 알것도 같다2022-02-21 00:00:00minjea985@naver.comR00000004400001minjea985@naver.com5삼겹보다 목살이 더 두껍게 잘라주시는데 씹을 때마다 육즙이 ㅜㅜ 환상2022-03-15 00:00:00minjea985@naver.com
 
 ### 제출 일자
 
-2024년 09월 29일 13:35:23
+2024년 09월 29일 13:36:07
 
 ### 문제 설명
 

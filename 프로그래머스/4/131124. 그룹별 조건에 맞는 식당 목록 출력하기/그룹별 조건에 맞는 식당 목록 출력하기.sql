@@ -1,10 +1,13 @@
-SELECT MEMBER_NAME, REVIEW_TEXT, DATE_FORMAT(r.review_date, '%Y-%m-%d')
-FROM REST_REVIEW r 
-    JOIN (SELECT MEMBER_ID
-          FROM rest_review
-          GROUP BY member_id
-          ORDER BY COUNT(*) DESC LIMIT 1) r1
-        ON r.member_id = r1.member_id
-    JOIN MEMBER_PROFILE m ON r.member_id = m.member_id
-
-ORDER BY r.review_date, r.review_text
+SELECT
+    r.rest_ID,
+    r.REVIEW_SCORE,
+    CASE
+        WHEN r.REVIEW_SCORE = 5 THEN r.MEMBER_ID
+        ELSE
+            CONCAT(r.REST_ID, ' and ', (
+                SELECT COUNT(*) -1 FROM REST_REVIEW AS sub
+                WHERE sub.REVIEW_SCORE = r.REVIEW_SCORE
+            ), ' other ')
+    END AS REVIEW
+FROM REST_REVIEW AS r
+GROUP BY r.REVIEW_SCORE;
