@@ -11,6 +11,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
@@ -45,9 +46,10 @@ public class Main {
             int endIdx = Integer.parseInt(st.nextToken());
             int gap = (int)Math.pow(2, height-1)-1;
 
-            long[] result = query(startIdx + gap,endIdx + gap);
-            System.out.println(result[0] + " " + result[1]);
+            long[] result = query(startIdx,endIdx,1, 1, maxSize / 2);
+            sb.append(result[0] + " " + result[1] + "\n");
         }
+        System.out.println(sb.toString());
     }
 
     public static void init(int nodeIdx, int k ) {
@@ -70,25 +72,24 @@ public class Main {
         segTree[nodeIdx][1] = Math.max(left[1], right[1]);
     }
 
-    public static long[] query(int startIdx, int endIdx) {
+    public static long[] query(int left, int right, int node, int start, int end) {
         long[] arr = new long[2];
         arr[0] =  Long.MAX_VALUE;
         arr[1] =  0;
 
-        while(startIdx <= endIdx) {
-            if(startIdx % 2 == 1) {
-                //해당 노드를 선택한다.
-                arr[0] = Math.min(arr[0], segTree[startIdx][0]);
-                arr[1] = Math.max(arr[1], segTree[startIdx][1]);
-            }
-            startIdx = (startIdx + 1) / 2;
-            if(endIdx % 2 == 0) {
-                arr[0] = Math.min(arr[0], segTree[endIdx][0]);
-                arr[1] = Math.max(arr[1], segTree[endIdx][1]);
-
-            }
-            endIdx = (endIdx - 1) / 2;
+        if(left > end || right < start) return arr;
+        if (start >= left && right >= end) {
+            return new long[] {segTree[node][0], segTree[node][1]};
         }
+
+        int mid = (start + end) >> 1;
+        long[] tmep1 = query(left, right, node << 1, start, mid);
+        long[] tmep2 = query(left, right, (node << 1) + 1, mid + 1, end);
+
+        arr[0] = Math.min(arr[0], tmep1[0]);
+        arr[0] = Math.min(arr[0], tmep2[0]);
+        arr[1] = Math.max(arr[1], tmep1[1]);
+        arr[1] = Math.max(arr[1], tmep2[1]);
 
         return arr;
     }
