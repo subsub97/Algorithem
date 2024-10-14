@@ -1,25 +1,18 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
 public class Main {
     static int N, M;
     static long[] numbers;
     static long[][] segTree;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
         StringBuilder sb = new StringBuilder();
-        
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+
+        N = read();
+        M = read();
 
         numbers = new long[N];
 
         for(int i = 0; i < N; i++) {
-            numbers[i] = Long.parseLong(br.readLine());
+            numbers[i] = read();
         }
 
 
@@ -41,9 +34,8 @@ public class Main {
         init(1, maxSize/2);
 
         for(int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int startIdx = Integer.parseInt(st.nextToken());
-            int endIdx = Integer.parseInt(st.nextToken());
+            int startIdx = read();
+            int endIdx = read();
             int gap = (int)Math.pow(2, height-1)-1;
 
             long[] result = query(startIdx + gap,endIdx + gap);
@@ -93,5 +85,21 @@ sb.append(result[0] + " " + result[1] + "\n");
         }
 
         return arr;
+    }
+        private static int read() throws Exception {
+        int d, o;
+        boolean negative = false;
+        d = System.in.read();
+
+        if (d == '-') {
+            negative = true;
+            d = System.in.read();
+        }
+        o = d & 15;
+
+        while ((d = System.in.read()) > 32)
+            o = (o << 3) + (o << 1) + (d & 15);
+
+        return negative? -o:o;
     }
 }
