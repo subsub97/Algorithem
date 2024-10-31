@@ -10,6 +10,7 @@ public class Main
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(st.nextToken());
         Q = Integer.parseInt(st.nextToken());
@@ -39,13 +40,15 @@ public class Main
                 s = e;
                 e = temp;
             }
-            System.out.println(query(s,e));
+            sb.append(query(s, e) + "\n");
+
             int idx = Integer.parseInt(st.nextToken());
             int value = Integer.parseInt(st.nextToken());
 
             segTree[idx + (maxSize/2)-1 ] = value;
             update((idx + (maxSize / 2) - 1) / 2);
         }
+        System.out.println(sb.toString());
     }
 
     public static void init(int curNode, int maxSize) {
