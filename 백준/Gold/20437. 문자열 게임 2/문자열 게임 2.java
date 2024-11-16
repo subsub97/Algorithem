@@ -7,10 +7,9 @@ import java.util.Queue;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
         int n = Integer.parseInt(br.readLine());
-
-
 
         for(int i = 0; i < n; i++) {
             int ansMin = (int) 1e9;
@@ -26,16 +25,17 @@ public class Main {
 
             if(result[1] == 0) {
                 if(k == 1) {
-                    System.out.println("1 1");
+                    sb.append("1 1\n");
                 }
                 else{
-                    System.out.println(-1);
+                    sb.append("-1\n");
                 }
             }
             else{
-                System.out.println(ansMin +" " + ansMax);
+                sb.append(ansMin + " " + ansMax + "\n");
             }
         }
+        System.out.println(sb.toString());
 
     }
 
@@ -48,6 +48,7 @@ public class Main {
         for(int i = 0; i < 26; i++) {
             qArr[i] = new LinkedList<>();
         }
+
         for (int i = 0; i < word.length(); i++) {
             int idx = word.charAt(i) - 'a';
 
