@@ -8,11 +8,13 @@ public class Main {
     static int N,M;
     static int[][] grid;
     static int[] dice = {0, 0, 0, 0, 0, 0};
-
+    static StringBuilder sb = new StringBuilder();
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         int curR = Integer.parseInt(st.nextToken());
@@ -45,6 +47,7 @@ public class Main {
                 move(curR, curC, dir);
             }
         }
+        System.out.print(sb.toString());
     }
 
     public static void move(int r, int c, int dir) {
@@ -92,7 +95,7 @@ public class Main {
         else{
             grid[r][c] = dice[1];
         }
-        System.out.println(dice[3]);
+        sb.append(dice[3] + "\n");
     }
 
     public static boolean inRange(int r, int c) {
