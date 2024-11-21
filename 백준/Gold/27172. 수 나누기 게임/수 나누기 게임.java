@@ -41,10 +41,13 @@ public class Main {
                 }
             }
         }
-
+        StringBuilder sb = new StringBuilder();
+        
         for(int i = 0; i < N; i++) {
-            System.out.print(scores[cards[i]] + " ");
+            sb.append(scores[cards[i]] + " ");
         }
+
+        System.out.print(sb.toString());
 
 
     }
