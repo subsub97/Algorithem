@@ -69,9 +69,13 @@ public class Main {
         for(int i = 0; i < K; i++) {
             if(used[i]) continue;
 
-            int[][] tempGrid = Arrays.stream(newGrid)
-                    .map(arr -> arr.clone())
-                    .toArray(int[][]::new);
+//            int[][] tempGrid = Arrays.stream(newGrid)
+//                    .map(arr -> arr.clone())
+//                    .toArray(int[][]::new);
+            int[][] tempGrid = new int[N][M];
+            for(int j = 0; j < N; j++) {
+                System.arraycopy(newGrid[j], 0, tempGrid[j], 0, M);
+            }
 
             int r = ops[i].r;
             int c = ops[i].c;
