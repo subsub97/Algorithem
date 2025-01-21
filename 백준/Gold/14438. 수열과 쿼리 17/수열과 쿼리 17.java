@@ -5,10 +5,8 @@ public class Main {
 	static int N;
 	static int[] segTree;
 	
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		N = Integer.parseInt(br.readLine());
+	public static void main(String[] args) throws Exception{
+		N = read();
 		
 		int h = (int) Math.ceil((Math.log(N) / Math.log(2)));
 		
@@ -17,11 +15,10 @@ public class Main {
 				
 		segTree = new int[maxSize];
 		
-		StringTokenizer st = new  StringTokenizer(br.readLine());
 		int cnt = 0;
 		for(int i = startIdx; i < maxSize; i++ ) {
 			if(cnt++ < N) {
-				segTree[i]  = Integer.parseInt(st.nextToken());
+				segTree[i]  = read();
 			}
 			else {
 				segTree[i]  = (int) (1e9);
@@ -31,17 +28,15 @@ public class Main {
 		
 		initSegTree(1,startIdx);
 		
-		int t = Integer.parseInt(br.readLine());
+		int t = read();
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(int i =0; i < t; i++) {
-			st = new StringTokenizer(br.readLine());
+		for(int i =0; i < t; i++) {	
+			int cmd = read();
 			
-			int cmd = Integer.parseInt(st.nextToken());
-			
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
+			int a = read();
+			int b = read();
 			
 			if(cmd == 1) {
 				//update 
@@ -104,6 +99,22 @@ public class Main {
 		}
 		return ans;
 	}
+    
+    private static int read() throws Exception {
+            int d, o;
+            boolean negative = false;
+            d = System.in.read();
+
+            if (d == '-') {
+                negative = true;
+                d = System.in.read();
+            }
+            o = d & 15;
+            while ((d = System.in.read()) > 32)
+                o = (o << 3) + (o << 1) + (d & 15);
+
+            return negative? -o:o;
+        }
 	
 
 
