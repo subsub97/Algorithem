@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 public class Main {
     static int N, M;
@@ -80,28 +81,67 @@ public class Main {
             cnt[find(i)]++;
         }
 
+
         for(Integer idx : cycleIdx) {
             if(outDegree[find(idx)] == 0) continue;
+
+            boolean[] checked = new boolean[N + 1];
 
             if(cnt[idx] >= max) {
                 for(int j = 1; j <=N; j++) {
                     isVisited = new boolean[N + 1];
 
-                    if(find(idx) == find(j)){
+                    if(find(idx) == find(j) && !checked[j]){
                         int curMax = dfs(j);
 
                         if(curMax > max ) {
                             max = curMax;
                             result = new ArrayList<>();
-                            result.add(j);
+                            ArrayList<Integer> cycleNodes = findCycleNodes(j);
+
+                            for(Integer k : cycleNodes) {
+                                checked[k] = true;
+                            }
+
+                            result.addAll(cycleNodes);
                         }
                         else if(curMax == max) {
-                            result.add(j);
+                            ArrayList<Integer> cycleNodes = findCycleNodes(j);
+
+                            for(Integer k : cycleNodes) {
+                                checked[k] = true;
+                            }
+
+                            result.addAll(cycleNodes);
                         }
                     }
                 }
             }
         }
+
+
+//        for(Integer idx : cycleIdx) {
+//            if(outDegree[find(idx)] == 0) continue;
+//
+//            if(cnt[idx] >= max) {
+//
+//                isVisited = new boolean[N + 1];
+//
+//                int curMax = dfs(idx);
+//
+//                if(curMax > max ) {
+//                    max = curMax;
+//                    result = new ArrayList<>();
+//                    ArrayList<Integer> cycleNodes = findCycleNodes(idx);
+//                    result.addAll(cycleNodes);
+//                }
+//                else if(curMax == max) {
+//                    ArrayList<Integer> cycleNodes = findCycleNodes(idx);
+//                    result.addAll(cycleNodes);
+//                }
+//
+//            }
+//        }
 
 
         StringBuilder sb = new StringBuilder();
@@ -152,4 +192,39 @@ public class Main {
 
         return negative ? -o : o;
     }
+
+    static ArrayList<Integer> findCycleNodes(int start) {
+        ArrayList<Integer> cycleNodes = new ArrayList<>();
+        boolean[] visited = new boolean[N + 1];
+        boolean[] inStack = new boolean[N + 1];
+        ArrayList<Integer> path = new ArrayList<>();
+
+        dfsForCycle(start, start, visited, inStack, path, cycleNodes);
+
+        return cycleNodes;
+    }
+
+    static void dfsForCycle(int curr, int start, boolean[] visited, boolean[] inStack,
+                            ArrayList<Integer> path, ArrayList<Integer> cycleNodes) {
+        visited[curr] = true;
+        inStack[curr] = true;
+        path.add(curr);
+
+        for(int next : arr[curr]) {
+            if(!visited[next]) {
+                dfsForCycle(next, start, visited, inStack, path, cycleNodes);
+            }
+            // start 노드로 돌아오는 사이클만 찾기
+            else if(next == start && inStack[next] && cycleNodes.isEmpty()) {
+                int startIdx = path.indexOf(next);
+                for(int i = startIdx; i < path.size(); i++) {
+                    cycleNodes.add(path.get(i));
+                }
+            }
+        }
+
+        path.remove(path.size() - 1);
+        inStack[curr] = false;
+    }
+
 }
