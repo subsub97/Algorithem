@@ -60,8 +60,9 @@ public class Main {
             }
             aIdx++;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append(N - lIdx - 1 + "\n");
 
-        System.out.print(N - lIdx - 1 + "\n");
         int maxLen = lIdx+1;
         for(int i = N-1 ; i >= 0 ; i--) {
             if(record[i] == maxLen){
@@ -73,8 +74,9 @@ public class Main {
 
         Collections.sort(list);
         for(Integer i : list) {
-            System.out.println(i);
+            sb.append(i + "\n");
         }
+        System.out.print(sb);
 
     }
 
