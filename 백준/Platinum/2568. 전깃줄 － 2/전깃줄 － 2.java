@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.StringTokenizer;
 
 public class Main {
     static int N;
@@ -12,20 +9,28 @@ public class Main {
     static int[] arr;
     static int[] lis;
     static int[] record;
+    static byte[] buffer = new byte[78888905];
+    static int idx, size;
+
+    static int read() throws IOException {
+        int n = 0;
+        byte c;
+        while ((c = buffer[idx++]) <= 32);
+        do n = (n << 3) + (n << 1) + (c & 15);
+        while (47 < (c = buffer[idx++]) && c < 58);
+        return n;
+    }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        N = Integer.parseInt(br.readLine());
+        size = System.in.read(buffer);
+        N = read();
         arr = new int[N];
         lis = new int[N];
         int max = 0;
+
         for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int right = Integer.parseInt(st.nextToken());
-            int left = Integer.parseInt(st.nextToken());
-
-
+            int right = read();
+            int left = read();
             eline[right] = left;
             eline2[left] = right;
             max = Math.max(max, left);
@@ -33,7 +38,6 @@ public class Main {
         }
 
         int cnt = 0;
-
         for (int i = 0; i <= max; i++) {
             if(eline[i] != 0) {
                 arr[cnt++] = eline[i];
@@ -42,7 +46,6 @@ public class Main {
 
         int lIdx = 0;
         int aIdx = 1;
-
         ArrayList<Integer> list = new ArrayList<>();
         record = new int[N];
         lis[0] = arr[0];
@@ -52,20 +55,20 @@ public class Main {
             if(lis[lIdx] < arr[aIdx]) {
                 lis[++lIdx] = arr[aIdx];
                 record[aIdx] = lIdx+1;
-            }
-            else{
+            } else {
                 int idx = binarySearch(0, lIdx, arr[aIdx]);
                 lis[idx] = arr[aIdx];
                 record[aIdx] = idx+1;
             }
             aIdx++;
         }
+
         StringBuilder sb = new StringBuilder();
-        sb.append(N - lIdx - 1 + "\n");
+        sb.append(N - lIdx - 1).append('\n');
 
         int maxLen = lIdx+1;
-        for(int i = N-1 ; i >= 0 ; i--) {
-            if(record[i] == maxLen){
+        for(int i = N-1; i >= 0; i--) {
+            if(record[i] == maxLen) {
                 maxLen--;
                 continue;
             }
@@ -74,22 +77,17 @@ public class Main {
 
         Collections.sort(list);
         for(Integer i : list) {
-            sb.append(i + "\n");
+            sb.append(i).append('\n');
         }
         System.out.print(sb);
-
     }
 
     static int binarySearch(int left, int right, int target) {
-        int mid;
-
         while(left < right) {
-            mid = (left + right) / 2;
-
+            int mid = (left + right) / 2;
             if(lis[mid] < target) {
                 left = mid + 1;
-            }
-            else{
+            } else {
                 right = mid;
             }
         }
