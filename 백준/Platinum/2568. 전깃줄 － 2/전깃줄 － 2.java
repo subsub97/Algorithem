@@ -9,25 +9,27 @@ public class Main {
     static int[] arr;
     static int[] lis;
     static int[] record;
-    static byte[] buffer = new byte[78888905];
-    static int idx, size;
-
-    static int read() throws IOException {
-        int n = 0;
-        byte c;
-        while ((c = buffer[idx++]) <= 32);
-        do n = (n << 3) + (n << 1) + (c & 15);
-        while (47 < (c = buffer[idx++]) && c < 58);
-        return n;
+    
+    private static int read() throws Exception {
+        int d, o;
+        boolean negative = false;
+        d = System.in.read();
+        if (d == '-') {
+            negative = true;
+            d = System.in.read();
+        }
+        o = d & 15;
+        while ((d = System.in.read()) > 32)
+            o = (o << 3) + (o << 1) + (d & 15);
+        return negative? -o:o;
     }
 
-    public static void main(String[] args) throws IOException {
-        size = System.in.read(buffer);
+    public static void main(String[] args) throws Exception {
         N = read();
         arr = new int[N];
         lis = new int[N];
         int max = 0;
-
+        
         for (int i = 0; i < N; i++) {
             int right = read();
             int left = read();
@@ -62,7 +64,7 @@ public class Main {
             }
             aIdx++;
         }
-
+        
         StringBuilder sb = new StringBuilder();
         sb.append(N - lIdx - 1).append('\n');
 
