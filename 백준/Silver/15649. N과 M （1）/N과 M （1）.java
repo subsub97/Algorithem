@@ -38,7 +38,7 @@ public class Main {
 
     public static void simulate() {
         for(int i =0; i < arr.length; i++) {
-            sb.append(arr[i] + " ");
+            sb.append(arr[i]).append(" ");
         }
         sb.append("\n");
     }
