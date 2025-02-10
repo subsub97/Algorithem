@@ -1,49 +1,55 @@
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) throws IOException{
-        //입력값 처리하는 BufferedReader
+    static int N;
+    static int MOD = 1_000_000_000;
+    static long[][][] dp;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        //결과값 출력하는 BufferedWriter
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
-        //나머지 연산 하는 수
-        int mod = 1000000000;
-        long[][][] DP = new long[N+1][10][1024];
-        //기본 DP[1][1~9][bit] 초기값 설정
-        for(int i=1;i<=9;i++){
-            DP[1][i][1<<i] = 1;
+
+        N = Integer.parseInt(br.readLine());
+
+        dp = new long[101][10][1 << 10];
+
+        // 0은 맨 앞에 올 수 없기 때문에 0을 제외한 마지막 수 초기화
+        for(int i = 1; i < 10; i++) {
+            dp[1][i][1 << i] = 1;
         }
-        //점화식 진행
-        for(int i=2;i<=N;i++){
-            for(int j=0;j<=9;j++){
-                for(int k=1;k<1024;k++){
-                    int nxtBit = k | (1 << j); // 이전 값들에 현재 k를 추가하는 경우 
-                    //DP[i][0][bit]일 때
-                    if(j == 0){
-                        DP[i][j][nxtBit] += DP[i-1][1][k];
-                    }else if(j == 9){		//DP[i][9][bit]일 때
-                        DP[i][j][nxtBit] += DP[i-1][8][k];
-                    }else{		//DP[i][1~8][bit]일 때
-                        DP[i][j][nxtBit] += (DP[i-1][j-1][k] + DP[i-1][j+1][k]) % mod;
+
+        // N 자리일 때 계단 수 구하기
+        for(int i = 2; i <= N; i++) {
+            for(int j = 0; j < 10; j++) {
+                //j는 마지막 자리 수를 의미한다.
+                int used = (1 << j);
+                for(int k = 1; k < (1 << 10); k++) {
+                    //현재 i자리를 만들기 위해서  i - 1 자리에 어떤 수들로 구성했는지 체크
+                    int newUsed = used | k;
+                    if(j == 0) {
+                        //마지막이 0인 경우에는 앞에 1만 올 수 있음
+                        // i-1번째에서 1로 끝나느 수뒤에 j를 붙이면 계단 수를 이어갈 수 있다.
+                        dp[i][j][newUsed] += dp[i - 1][1][k];
                     }
-                    DP[i][j][nxtBit] %= mod;
+                    else if(j == 9) {
+                        dp[i][j][newUsed] += dp[i - 1][8][k];
+                    }
+                    else{
+                        dp[i][j][newUsed] += (dp[i - 1][j - 1][k] + dp[i - 1][j + 1][k]);
+                    }
+                    dp[i][j][newUsed] %= MOD;
                 }
             }
         }
-        long result = 0;
-        //DP[N][0~9][1023]에 대한 합으로 계단수 경우 구하기
-        for(int i=0;i<=9;i++){
-            result += DP[N][i][1023]; // N 자리수에서 0부터 9까지 모두 있는 경우, 마지막 자리가 0~9 까지 끝나는 경우 모두를 확인한다. 
-            result %= mod;
+
+
+        long ans = 0;
+        for(int i = 0; i < 10; i++) {
+            ans += dp[N][i][1023];
+            ans %= MOD;
         }
-        //구한 계단수 개수 BufferedWriter 저장
-        bw.write(String.valueOf(result));
-        bw.flush();		//결과 출력
-        bw.close();
-        br.close();
 
-
+        System.out.println(ans);
     }
 }
