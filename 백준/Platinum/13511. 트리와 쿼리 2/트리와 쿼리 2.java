@@ -172,21 +172,6 @@ public class Main {
         return cost;
     }
 
-    // 경로의 비용을 어떻게 출력? LCA를 구해서 둘의 LCA 까지 비용을 더해서 출력하면된다.
-    // LCA가 둘 중 하나인 경우 조심. 아니면 A -> A인 경우
-    // u -> v k번째 정점은 어떻게 구하죠?
-
-    // 1.LCA 높이 맞춰주는 과정 연산
-    // 2. 높이를 맞춘 이후 희소 배열을 이용해서 올라가는 과정에서 2 ^ i 씩 움직임
-    // 1번 + 2 ^ i 가 k를 넘어가는 순간을 체크
-
-    // 1. u -> LCA 까지 거리 구하고
-    // 2. v -> LCA 까지 거리 구하고
-    // 1 + 2 = A일때
-    // k가 u -> LCA = B인경우 B < k 라면
-    // A - (B + (K - B)) =C 를 구한다.
-    // v 에서 C만큼 떨어진 녀석이 k만큼 떨어진 정점이다.
-
     private static int findK(int u, int v,int k) {
         //TODO u -> v 랑 v -> u는 다른 경우
 
@@ -216,12 +201,6 @@ public class Main {
             return u;
         }
 
-    // 1. u -> LCA 까지 거리 구하고
-    // 2. v -> LCA 까지 거리 구하고
-    // 1 + 2 = A일때
-    // k가 u -> LCA = B인경우 B < k 라면
-    // A - (B + (K - B)) =C 를 구한다.
-    // v 에서 C만큼 떨어진 녀석이 k만큼 떨어진 정점이다.
         else {
             k -= (gap + 1);
             gap = level[v] - (level[lca] + k);
