@@ -5,75 +5,84 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int N, M, K;
-    static long[] numbers;
     static long[] segTree;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        numbers = new long[N];
+        int h = (int) Math.ceil((Math.log(N) / Math.log(2)));
 
-        for (int i = 0; i < N; i++) {
-            numbers[i] = Long.parseLong(br.readLine());
+        segTree = new long[1 << (h + 1)];
+
+        for(int i = 0; i < N; i++) {
+            segTree[(1 << h) + i] = Long.parseLong(br.readLine());
         }
 
-        int height = (int) Math.ceil(Math.log(N) / Math.log(2)) + 1;
-        int maxSize = (int) Math.pow(2, height);
-        segTree = new long[maxSize];
+        //TODO 쿼리 입력 받기
+        initSegTree(1, h);
 
-        initSegmentTree(1, 0, N - 1);
-
-        for (int i = 0; i < M + K; i++) {
+        for(int i =0; i < M+K; i++) {
             st = new StringTokenizer(br.readLine());
-            long cmd = Long.parseLong(st.nextToken());
-            long startIdx = Long.parseLong(st.nextToken()) - 1;
-            long endIdx = Long.parseLong(st.nextToken());
 
-            if (cmd == 1) {
-                updateSegmentTree(1, 0, N - 1, (int)startIdx, endIdx);
-            } else {
-                long result = sumSection(1, 0, N - 1, (int)startIdx, (int)endIdx - 1);
-                System.out.println(result);
+            int cmd = Integer.parseInt(st.nextToken());
+            long a = Long.parseLong(st.nextToken());
+            long b = Long.parseLong(st.nextToken());
+
+            if(cmd == 1) {
+                // update
+                updateSegTree(b, 1, 1, (1 << h), a, a);
+            }
+            else{
+                System.out.println(query(1, 1, (1 << h), a, b));
             }
         }
     }
 
-    public static long initSegmentTree(int node, int start, int end) {
-        if (start == end) {
-            return segTree[node] = numbers[start];
-        } else {
-            int mid = (start + end) / 2;
-            return segTree[node] = initSegmentTree(node * 2, start, mid) + initSegmentTree(node * 2 + 1, mid + 1, end);
-        }
+
+    private static long initSegTree(int idx, int h) {
+        if(idx >= (1 << h)) return segTree[idx];
+        return segTree[idx] =  initSegTree(idx * 2, h) + initSegTree(idx * 2 + 1, h);
     }
 
-    public static void updateSegmentTree(int node, int start, int end, int idx, long newValue) {
-        if (start == idx && end == idx) {
-            segTree[node] = newValue;
-        } else {
-            int mid = (start + end) / 2;
-            if (start <= idx && idx <= mid) {
-                updateSegmentTree(node * 2, start, mid, idx, newValue);
-            } else {
-                updateSegmentTree(node * 2 + 1, mid + 1, end, idx, newValue);
-            }
-            segTree[node] = segTree[node * 2] + segTree[node * 2 + 1];
+    private static void updateSegTree(long num,int idx,int s, int e, long l, long r) {
+        //update l,r 을 찾으러 ㄱㄱ
+
+        // 범위 밖인지?
+        if(e < l || s > r) return;
+
+        //범위 내부인지?
+        if(l <= s && e <= r) {
+            //내가 찾던 곳?
+            segTree[idx] = num;
+            return;
         }
+
+        int mid = (s + e) / 2;
+
+        updateSegTree(num, idx * 2, s, mid, l, r);
+        updateSegTree(num, idx * 2 + 1, mid + 1, e, l, r);
+
+        segTree[idx] = segTree[idx * 2] + segTree[idx * 2 + 1];
     }
 
-    public static long sumSection(int node, int start, int end, int left, int right) {
-        if (left > end || right < start) {
-            return 0;
+
+    private static long query(int idx, int s, int e, long l, long r) {
+        if(e < l || s > r) return 0L;
+
+        if(l <= s && e <= r) {
+            // 선택하고자하는 구간이라면
+            return segTree[idx];
         }
-        if (left <= start && end <= right) {
-            return segTree[node];
-        }
-        int mid = (start + end) / 2;
-        return sumSection(node * 2, start, mid, left, right) + sumSection(node * 2 + 1, mid + 1, end, left, right);
+
+        int mid = (s + e) / 2;
+
+        return query(idx * 2, s, mid, l,r) + query(idx * 2 + 1, mid + 1, e,l,r);
     }
+
 }
