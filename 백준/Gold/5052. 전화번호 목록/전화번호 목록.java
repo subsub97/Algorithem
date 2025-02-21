@@ -67,10 +67,7 @@ public class Main {
 
     static class TrieNode {
         TrieNode[] children= new TrieNode[10];
-        boolean isEnd;
+        boolean isEnd = false;
 
-        TrieNode() {
-            isEnd = false;
-        }
     }
 }
