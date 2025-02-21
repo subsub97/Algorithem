@@ -66,11 +66,10 @@ public class Main {
     }
 
     static class TrieNode {
-        TrieNode[] children;
+        TrieNode[] children= new TrieNode[10];
         boolean isEnd;
 
         TrieNode() {
-            children = new TrieNode[10];
             isEnd = false;
         }
     }
