@@ -42,10 +42,11 @@ public class Main {
                 }
 
                 int v2 = map.getOrDefault(p2, size);
+                
                 if(v2 == size) {
                     map.put(p2, size++);
                 }
-
+                
                 int a = find(v1), b = find(v2);
 
                 if(a > b) {
