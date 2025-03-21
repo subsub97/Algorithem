@@ -1,83 +1,50 @@
-import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+class Main{
 
-public class Main {
-    static int N;
-    static final int OFFSET = 360_000;
-    static int[] arr1;
-    static int[] arr2;
+    static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3 ) + (n << 1) + (c & 15);
+        return n;
+    }
 
-    static int[] f1;
-    static int[] f2;
+    public static void main(String[] args)throws Exception{
+        final int MAX    = 360_000;
+        final int LEN    = MAX<<1;
+        int fail[]        = new int[MAX];
+        boolean patn[]    = new boolean[MAX];
+        boolean text[]    = new boolean[LEN];
+        int N            = read();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        N = Integer.parseInt(br.readLine());
+        for(int i=0; i<N; i++){
+            int a = read();
+            text[a] = true;
+            text[a + MAX] = true;
+        }
+        for(int i=0; i<N; i++)patn[read()] = true;
 
-        arr1 = new int[N];
-        arr2 = new int[N];
-        f1 = new int[N];
-        f2 = new int[N];
+        for(int i=1,j=0; i<MAX; i++)
+        {
+            while(0<j && patn[i] != patn[j])
+                j = fail[j - 1];
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        for(int i = 0; i < N; i++) {
-            arr1[i] = Integer.parseInt(st.nextToken());
+            if(patn[i] == patn[j])
+                fail[i] = ++j;
         }
 
-        st = new StringTokenizer(br.readLine());
-        for(int i = 0; i < N; i++) {
-            arr2[i] = Integer.parseInt(st.nextToken());
-        }
+        for(int i=0, j=0; i<LEN; i++)
+        {
+            while(0<j && text[i] != patn[j])
+                j = fail[j - 1];
 
-        Arrays.sort(arr1);
-        Arrays.sort(arr2);
-
-        for(int i = 1; i < N; i++) {
-            f1[i-1] = arr1[i] - arr1[i-1];
-            f2[i-1] = arr2[i] - arr2[i-1];
-        }
-
-        f1[N - 1] = OFFSET - arr1[N - 1] + arr1[0];
-        f2[N - 1] = OFFSET - arr2[N - 1] + arr2[0];
-
-        int[] failure = new int[N];
-
-        int j = 0;
-
-        for(int i = 1; i < N; i++) {
-            while(j != 0 && f2[i] != f2[j]) {
-                j = failure[j - 1];
+            if(text[i] == patn[j])
+            {
+                if(++j== MAX)
+                {
+                    System.out.print("possible");
+                    return;
+                }
             }
-
-            if(f2[i] == f2[j]) j++;
-
-            failure[i] = j;
         }
-
-        j = 0;
-        boolean flag = false;
-
-        for(int i = 0; i < N*2; i++) {
-
-            while(j != 0 && f1[i % N] != f2[j]) {
-                j = failure[j - 1];
-            }
-
-            if(f1[i % N] == f2[j]) j++;
-
-            if(j == N) {
-                System.out.println("possible");
-                flag = true;
-                break;
-            }
-
-        }
-
-        if(!flag) System.out.println("impossible");
-
-
+        System.out.print("impossible");
     }
 }
