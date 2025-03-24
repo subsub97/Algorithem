@@ -2,29 +2,19 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Jewelry {
-        int weight;
-        int cost;
-
-        Jewelry(int weight, int cost) {
-            this.weight = weight;
-            this.cost = cost;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int N = Integer.parseInt(st.nextToken()); // 보석 수
-        int K = Integer.parseInt(st.nextToken()); // 가방 수
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-        Jewelry[] jewelries = new Jewelry[N];
+        int[][] jewelries = new int[N][2];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            int weight = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
-            jewelries[i] = new Jewelry(weight, cost);
+            jewelries[i][0] = Integer.parseInt(st.nextToken()); // weight
+            jewelries[i][1] = Integer.parseInt(st.nextToken()); // cost
         }
 
         int[] bags = new int[K];
@@ -33,30 +23,27 @@ public class Main {
         }
 
         // 정렬
-        Arrays.sort(jewelries, Comparator.comparingInt(j -> j.weight)); // 무게 오름차순
-        Arrays.sort(bags); // 가방 무게 오름차순
+        Arrays.sort(jewelries, Comparator.comparingInt(j -> j[0])); // weight 오름차순
+        Arrays.sort(bags); // bag 오름차순
 
-        // 가격 기준 최대 힙
         PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
-        long answer = 0;
+        long total = 0;
         int idx = 0;
 
         for (int i = 0; i < K; i++) {
-            int bagCapacity = bags[i];
+            int bagWeight = bags[i];
 
-            // 현재 가방에 담을 수 있는 보석들 전부 PQ에 넣기
-            while (idx < N && jewelries[idx].weight <= bagCapacity) {
-                pq.add(jewelries[idx].cost);
+            while (idx < N && jewelries[idx][0] <= bagWeight) {
+                pq.add(jewelries[idx][1]); // cost만 저장
                 idx++;
             }
 
-            // 가장 비싼 보석을 담는다
             if (!pq.isEmpty()) {
-                answer += pq.poll();
+                total += pq.poll(); // 가장 비싼 거 하나 꺼냄
             }
         }
 
-        System.out.println(answer);
+        System.out.println(total);
     }
 }
