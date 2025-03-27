@@ -65,7 +65,7 @@ public class Main {
 
             for(int i = 0; i < pairs.size(); i++) {
                 Pair p = pairs.get(i);
-                
+
                 propagation(p.r, p.c);
             }
         }
