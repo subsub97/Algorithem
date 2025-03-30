@@ -35,9 +35,6 @@ public class Main {
             long a = Long.parseLong(st.nextToken());
             arr[i] = a;
             list.add(i);
-//            if(visited.getOrDefault(a,false)) continue;
-//            visited.put(a,true);
-//            list.add(i);
         }
 
         dfs(0, 0);
