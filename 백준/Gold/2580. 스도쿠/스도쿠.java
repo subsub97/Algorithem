@@ -9,6 +9,7 @@ public class Main {
     static ArrayList<Pair> list = new ArrayList<>();
     static ArrayList<Integer>[] numbers = new ArrayList[N];
     static boolean[][] visited = new boolean[N + 1][N + 1];
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
 
@@ -35,6 +36,7 @@ public class Main {
         }
 
         dfs(0);
+        System.out.println(sb);
 
     }
 
@@ -43,9 +45,9 @@ public class Main {
             if(simulate()) {
                 for(int i = 0; i < N; i++) {
                     for(int j = 0; j < N; j++) {
-                        System.out.print(grid[i][j] + " ");
+                        sb.append(grid[i][j]).append(" ");
                     }
-                    System.out.println();
+                    sb.append("\n");
                 }
                 return true;
             }
