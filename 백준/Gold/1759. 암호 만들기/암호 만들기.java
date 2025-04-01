@@ -6,7 +6,6 @@ public class Main {
     static int L , C ;
     static char[] alphabets;
     static char[] ans;
-    static boolean[] visited = new boolean[26];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -42,21 +41,13 @@ public class Main {
         }
 
         for(int i = idx; i < C; i++) {
-            if((L - d > (2-c) && isVowel(alphabets[i]) )|| (isVowel(alphabets[i]) && c >= 2)) {
-                //모음 넣어도 되는 경우
-                ans[d] = alphabets[i];
-                visited[alphabets[i] - 'a'] = true;
-                dfs(d+1, i + 1, v + 1, c);
-                visited[alphabets[i] - 'a'] = false;
-                continue;
-            }
-
-            // 자음
-            if(isVowel(alphabets[i])) continue;
             ans[d] = alphabets[i];
-            visited[alphabets[i] - 'a'] = true;
-            dfs(d+1, i + 1, v, c + 1);
-            visited[alphabets[i] - 'a'] = false;
+            if(isVowel(alphabets[i])) {
+                dfs(d+1, i + 1, v + 1, c);
+            }
+            else{
+                dfs(d+1, i + 1, v, c + 1);
+            }
         }
     }
 
