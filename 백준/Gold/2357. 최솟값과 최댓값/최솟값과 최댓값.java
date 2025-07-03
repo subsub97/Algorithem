@@ -1,105 +1,90 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class Main {
     static int N, M;
-    static long[] numbers;
-    static long[][] segTree;
+    static Node[] segTree;
+    static int start;
+    static final Node EMPTY = new Node(Integer.MAX_VALUE, -1); // 재사용용 노드
 
-    public static void main(String[] args) throws Exception {
+    static class Node {
+        int min, max;
+
+        public Node(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        // 세그먼트 트리의 시작 인덱스 계산
+        int size = 1;
+        while (size < N) size <<= 1;
+        start = size;
+        segTree = new Node[start << 1];
+
+        // 초기화: 모든 노드를 기본값으로 설정
+        for (int i = 0; i < segTree.length; i++) {
+            segTree[i] = new Node(Integer.MAX_VALUE, -1);
+        }
+
+        // 입력 최적화
+        StringBuilder inputBuilder = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            inputBuilder.append(br.readLine()).append(" ");
+        }
+        StringTokenizer nums = new StringTokenizer(inputBuilder.toString());
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(nums.nextToken());
+            segTree[start + i] = new Node(num, num);
+        }
+
+        // 트리 초기화
+        init();
+
+        // 쿼리 처리
         StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
 
-        N = read();
-        M = read();
-
-        numbers = new long[N];
-
-        for(int i = 0; i < N; i++) {
-            numbers[i] = read();
+            Node result = query(1, 1, start, s, e);
+            sb.append(result.min).append(" ").append(result.max).append("\n");
         }
-
-
-
-        //최소 세그트리 크기 구하기
-        int height = (int) Math.ceil(Math.log(N) / Math.log(2)) + 1;
-        int maxSize = (int) Math.pow(2, height);
-        segTree = new long[maxSize][3];
-        int idx = 0;
-
-        for(int i = maxSize / 2; i < maxSize / 2 + N; i++) {
-            long curValue = numbers[idx++];
-
-            segTree[i][0] = curValue;
-            segTree[i][1] = curValue;
-            segTree[i][2] = idx;
-        }
-
-        init(1, maxSize/2);
-
-        for(int i = 0; i < M; i++) {
-            int startIdx = read();
-            int endIdx = read();
-            int gap = (int)Math.pow(2, height-1)-1;
-
-            long[] result = query(startIdx + gap,endIdx + gap);
-sb.append(result[0] + " " + result[1] + "\n");
-        }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
-    public static void init(int nodeIdx, int k ) {
-        if(nodeIdx >= k) return;
-
-        // 자식 노드 초기화
-        init(2 * nodeIdx, k);
-        init(2 * nodeIdx + 1, k);
-
-        //현재 노드 초기화
-        long[] left = segTree[nodeIdx * 2];
-        long[] right = segTree[nodeIdx * 2 + 1];
-
-        if(right[0] != 0){
-            segTree[nodeIdx][0] = Math.min(left[0], right[0]);
+    private static void init() {
+        for (int i = start - 1; i > 0; i--) {
+            Node left = segTree[i * 2];
+            Node right = segTree[i * 2 + 1];
+            segTree[i] = new Node(
+                    Math.min(left.min, right.min),
+                    Math.max(left.max, right.max)
+            );
         }
-        else{
-            segTree[nodeIdx][0] = left[0];
-        }
-        segTree[nodeIdx][1] = Math.max(left[1], right[1]);
     }
 
-    public static long[] query(int startIdx, int endIdx) {
-        long[] arr = new long[2];
-        arr[0] =  Long.MAX_VALUE;
-        arr[1] =  0;
+    private static Node query(int idx, int l, int r, int s, int e) {
+        if (r < s || l > e) return EMPTY;
+        if (s <= l && r <= e) return segTree[idx];
 
-        while(startIdx <= endIdx) {
-            if(startIdx % 2 == 1) {
-                //해당 노드를 선택한다.
-                arr[0] = Math.min(arr[0], segTree[startIdx][0]);
-                arr[1] = Math.max(arr[1], segTree[startIdx][1]);
-            }
-            startIdx = (startIdx + 1) / 2;
-            if(endIdx % 2 == 0) {
-                arr[0] = Math.min(arr[0], segTree[endIdx][0]);
-                arr[1] = Math.max(arr[1], segTree[endIdx][1]);
+        int mid = (l + r) >> 1;
+        Node left = query(idx * 2, l, mid, s, e);
+        Node right = query(idx * 2 + 1, mid + 1, r, s, e);
 
-            }
-            endIdx = (endIdx - 1) / 2;
-        }
-
-        return arr;
-    }
-        private static int read() throws Exception {
-        int d, o;
-        boolean negative = false;
-        d = System.in.read();
-
-        if (d == '-') {
-            negative = true;
-            d = System.in.read();
-        }
-        o = d & 15;
-
-        while ((d = System.in.read()) > 32)
-            o = (o << 3) + (o << 1) + (d & 15);
-
-        return negative? -o:o;
+        return new Node(
+                Math.min(left.min, right.min),
+                Math.max(left.max, right.max)
+        );
     }
 }
