@@ -8,9 +8,9 @@ import java.util.StringTokenizer;
 public class Main {
     static int T, K;
     static int cnt;
-    static HashMap<Long, Integer> map;
-    static PriorityQueue<Long> minHeap;
-    static PriorityQueue<Long> maxHeap;
+    static HashMap<Integer, Integer> map;
+    static PriorityQueue<Integer> minHeap;
+    static PriorityQueue<Integer> maxHeap;
 
     // 20:04
     public static void main(String[] args) throws IOException {
@@ -33,7 +33,7 @@ public class Main {
                 st = new StringTokenizer(br.readLine());
 
                 String cmd = st.nextToken();
-                Long n = Long.parseLong(st.nextToken());
+                int n = Integer.parseInt(st.nextToken());
 
                 if(cmd.equals("I")) {
                     minHeap.add(n);
@@ -45,21 +45,21 @@ public class Main {
                     // 삭제인 경우
                     if(n == 1) {
 
-                       while(!maxHeap.isEmpty()) {
-                           Long max  = maxHeap.poll();
-
-                           if(map.get(max) > 0) {
-                               map.put(max, map.get(max) - 1);
-                               cnt--;
-                               break;
-                           }
-                       }
+                        while(!maxHeap.isEmpty()) {
+                            int max  = maxHeap.poll();
+                            int curCnt = map.get(max);
+                            if(curCnt > 0) {
+                                map.put(max, curCnt - 1);
+                                cnt--;
+                                break;
+                            }
+                        }
                     } else {
                         while(!minHeap.isEmpty()) {
-                            Long min  = minHeap.poll();
-
-                            if(map.get(min) > 0) {
-                                map.put(min, map.get(min) - 1);
+                            int min  = minHeap.poll();
+                            int curCnt = map.get(min);
+                            if(curCnt > 0) {
+                                map.put(min, curCnt - 1);
                                 cnt--;
                                 break;
                             }
@@ -72,8 +72,8 @@ public class Main {
             if(cnt == 0) {
                 sb.append("EMPTY").append("\n");
             }else{
-                Long maxValue = 0L;
-                Long minValue = 0L;
+                int maxValue = 0;
+                int minValue = 0;
 
                 while(!maxHeap.isEmpty()) {
                     maxValue  = maxHeap.poll();
